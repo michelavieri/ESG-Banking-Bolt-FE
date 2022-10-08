@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createTheme, MuiThemeProvider } from "@material-ui/core";
 import LandingPage from './routes/landingPage';
+import HomePage from './routes/homePage';
 
 const theme = createTheme({
   palette: {
@@ -18,9 +19,16 @@ const theme = createTheme({
 });
 
 function App() {
+  const [showLanding, setShowLanding] = useState(true);
+
   return (
     <MuiThemeProvider theme={theme}>
-      <LandingPage />
+      {showLanding &&
+        <LandingPage setShowLanding={setShowLanding} />
+      }
+      {!showLanding &&
+        <HomePage />
+      }
     </MuiThemeProvider>
   );
 }
