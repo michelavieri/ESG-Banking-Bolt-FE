@@ -44,7 +44,12 @@ const Text = styled.p`
   font-size: 16px;
 `
 
-function landingPage() {
+function landingPage({ setShowLanding }) {
+
+  const handleGetStartedClick = () => {
+    setShowLanding(false);
+  }
+
   return (
     <GetStartedPage>
       <LandingPagePic style={{ width: '100%' }} />
@@ -53,7 +58,8 @@ function landingPage() {
         <SubHeader>Sustainable bank for sustainable future</SubHeader>
         <Text>Bank with us</Text>
       </div>
-      <GetStartedButton color="primary" variant="contained">
+      <GetStartedButton color="primary" variant="contained"
+        onClick={handleGetStartedClick}>
         Get Started
       </GetStartedButton>
     </GetStartedPage>
