@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import App from './App';
-import GreenPage from './routes/greenPage'
+import GreenPage from './routes/greenPage';
+import TreePage from './routes/treePage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -12,6 +13,7 @@ root.render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/green" element={<GreenPage />} />
+        <Route path="/tree" element={<TreePage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
