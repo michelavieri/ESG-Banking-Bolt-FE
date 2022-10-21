@@ -259,7 +259,7 @@ function greenPage() {
       <ColumnFlex>
         <RowFlex style={{ padding: "12px 26px", marginTop:'25px'}}>
           <Title>Rewards</Title>
-          <Subtitle>View All</Subtitle>
+          <Subtitle onClick={() => navigate('/list-rewards')}>View All</Subtitle>
         </RowFlex>
 
         <Cards>
