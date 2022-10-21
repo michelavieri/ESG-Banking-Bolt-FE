@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import App from './App';
+import PaymentPage from './routes/paymentPage'
+import ConfirmPaymentPage from './routes/confirmPaymentPage'
+import SuccessPaymentPage from './routes/successPaymentPage'
 import GreenPage from './routes/greenPage';
 import TreePage from './routes/treePage';
 import ListRewardsPage from './routes/listRewardsPage'
@@ -15,6 +18,9 @@ root.render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/green" element={<GreenPage />} />
+        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/confirm-payment" element={<ConfirmPaymentPage />} />
+        <Route path="/success-payment" element={<SuccessPaymentPage />} />
         <Route path="/tree" element={<TreePage />} />
         <Route path="list-rewards" element={<ListRewardsPage/>}/>
         <Route path="list-promotions" element={<ListPromotionsPage/>} />
