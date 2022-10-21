@@ -6,6 +6,7 @@ import App from './App';
 import GreenPage from './routes/greenPage';
 import TreePage from './routes/treePage';
 import ListRewardsPage from './routes/listRewardsPage'
+import ListPromotionsPage from './routes/listPromotionsPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -16,6 +17,7 @@ root.render(
         <Route path="/green" element={<GreenPage />} />
         <Route path="/tree" element={<TreePage />} />
         <Route path="list-rewards" element={<ListRewardsPage/>}/>
+        <Route path="list-promotions" element={<ListPromotionsPage/>} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
