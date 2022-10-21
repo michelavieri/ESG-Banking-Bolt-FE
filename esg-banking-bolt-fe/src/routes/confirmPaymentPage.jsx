@@ -124,6 +124,7 @@ function confirmPaymentPage() {
   const [button1, setButton1] = useState(false);
   const [button2, setButton2] = useState(false);
   const [button3, setButton3] = useState(false);
+  const [donate, setDonate] = useState("");
 
   const addDonation = useCallback((donation) => {
     setButton1(false);
@@ -161,7 +162,17 @@ function confirmPaymentPage() {
     }
 
     setAmount(newAmount);
+    setDonate(donation);
   }, [amount, button1, button2, button3]);
+
+  const confirm = () => {
+    navigate('/success-payment', {
+      state: {
+        'amount': amount,
+        'donation': donate
+      }
+    })
+  }
 
   return (
     <PaymentPage>
@@ -208,7 +219,7 @@ function confirmPaymentPage() {
           </RowFlex>
           <Text style={{ color: '#828282', marginTop: '15px' }}> This donation is for the tree donation movement </Text>
           <img src={PaymentToken} alt="" width={335} height={70} style={{ alignSelf: 'center', marginTop: '30px' }}/>
-          <ConfirmButton type="button"> {`CONFIRM - SGD${amount}`} </ConfirmButton>
+          <ConfirmButton type="button" onClick={() => confirm()}> {`CONFIRM - SGD${amount}`} </ConfirmButton>
         </>
       )}
     </PaymentPage>

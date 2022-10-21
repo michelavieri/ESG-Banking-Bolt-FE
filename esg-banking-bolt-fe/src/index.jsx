@@ -6,6 +6,7 @@ import App from './App';
 import GreenPage from './routes/greenPage'
 import PaymentPage from './routes/paymentPage'
 import ConfirmPaymentPage from './routes/confirmPaymentPage'
+import SuccessPaymentPage from './routes/successPaymentPage'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -16,6 +17,7 @@ root.render(
         <Route path="/green" element={<GreenPage />} />
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/confirm-payment" element={<ConfirmPaymentPage />} />
+        <Route path="/success-payment" element={<SuccessPaymentPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
