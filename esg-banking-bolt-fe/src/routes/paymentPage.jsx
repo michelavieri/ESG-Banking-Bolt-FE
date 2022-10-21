@@ -80,6 +80,10 @@ function paymentPage() {
     if (result) {
       setScanResultWebCam(result);
     }
+
+    if(result !== 'Scanning') {
+      navigate('/confirm-payment');
+    }
   }
 
   return (
