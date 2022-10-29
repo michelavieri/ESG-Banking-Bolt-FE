@@ -7,7 +7,6 @@ import GreenPage from './routes/greenPage'
 import PaymentPage from './routes/paymentPage'
 import ConfirmPaymentPage from './routes/confirmPaymentPage'
 import SuccessPaymentPage from './routes/successPaymentPage'
-import GreenPage from './routes/greenPage';
 import TreePage from './routes/treePage';
 import ListRewardsPage from './routes/listRewardsPage'
 import ListPromotionsPage from './routes/listPromotionsPage';
