@@ -67,7 +67,7 @@ function listRewardsPage() {
             <Header>
                 <RowFlex>
                     <BackButton width = "16" height= "16" onClick={() => navigate('/green')}/>
-                    <HeaderTitle>Green Page</HeaderTitle>
+                    <HeaderTitle>Rewards Page</HeaderTitle>
                 </RowFlex>
             </Header>
             <Cards>
