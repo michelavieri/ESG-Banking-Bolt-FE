@@ -1,13 +1,13 @@
-import React, {useState, useCallback} from 'react'
+import React, {useState, useCallback, useEffect} from 'react'
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from '@material-ui/core';
+import axios from 'axios';
 import LeftArrow from '../assets/left-arrow.png';
 import QrCode from '../assets/qrcode.png';
 import Leaf from '../assets/leaf-green.png';
-import SushiTei from '../assets/sushitei.png';
+import { ReactComponent as WhiteLeaf } from '../assets/leaf.svg';
 import Money from '../assets/money.png';
-import PaymentToken from '../assets/payment-token.png';
 
 
 const PaymentPage = styled.div`
@@ -90,6 +90,16 @@ const Line = styled.hr`
   background-color: #828282;
   border-width: 0px;
 `
+const DonationCard = styled.div `
+  color: black;
+  background-color: #ffffff;
+  width: 355px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  align-self: center;
+`
+
 const DonationButton = styled.button`
   background-color: #828282;
   color: white;
@@ -120,42 +130,63 @@ const ConfirmButton = styled.button`
 
 function confirmPaymentPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [amount, setAmount] = useState("");
   const [button1, setButton1] = useState(false);
   const [button2, setButton2] = useState(false);
   const [button3, setButton3] = useState(false);
-  const [donate, setDonate] = useState("");
+  const [donate, setDonate] = useState("0");
+  const [company, setCompany] = useState("");
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    axios.get(`http://localhost:4000/payment/pay/${location.state.company}`)
+    .then(res => {
+      setCompany(res.data);
+    })
+  }, []);
+
+  useEffect(() => {
+    const req = {
+      "amount": amount,
+      "donation" : donate,
+    }
+    axios.post(`http://localhost:4000/payment/calculateToken`, {...req})
+    .then(res => {
+      setToken((res.data.token).substr(0,4));
+    })
+  }, [amount]);
 
   const addDonation = useCallback((donation) => {
+    let newAmount = amount;
+
     setButton1(false);
     setButton2(false);
     setButton3(false);
 
-    let newAmount = "";
-
     if (donation === 0.1) {
       if(button1) {
         setButton1(false);
-        newAmount = `$${(parseFloat(amount.substr(1), 10) - 0.1).toString()}`;
+        newAmount = `${(parseFloat(amount, 10) - 0.1).toString().substr(0,4)}`;
       } else {
         setButton1(true);
-        newAmount = `$${(parseInt(amount.substr(1), 10) + 0.1).toString()}`;
+        newAmount = `${(parseFloat(amount, 10) + 0.1).toString().substr(0,4)}`;
       }
     } else if (donation === 0.2) {
       if(button2) {
         setButton2(false);
-        newAmount = `$${(parseFloat(amount.substr(1), 10) - 0.2).toString()}`;
+        newAmount = `${(parseFloat(amount, 10) - 0.2).toString().substr(0,4)}`;
       } else {
         setButton2(true);
-        newAmount = `$${(parseInt(amount.substr(1), 10) + 0.2).toString()}`;
+        newAmount = `${(parseFloat(amount, 10) + 0.2).toString().substr(0,4)}`;
       }
     } else if (donation === 0.3) {
       if(button3) {
         setButton3(false);
-        newAmount = `$${(parseFloat(amount.substr(1), 10) - 0.3).toString()}`;
+        newAmount = `${(parseFloat(amount, 10) - 0.3).toString().substr(0,4)}`;
       } else {
         setButton3(true);
-        newAmount = `$${(parseInt(amount.substr(1), 10) + 0.3).toString()}`;
+        newAmount = `${(parseFloat(amount, 10) + 0.3).toString().substr(0,4)}`;
       }
     } else {
       newAmount = amount
@@ -166,11 +197,25 @@ function confirmPaymentPage() {
   }, [amount, button1, button2, button3]);
 
   const confirm = () => {
-    navigate('/success-payment', {
-      state: {
-        'amount': amount,
-        'donation': donate
+    const req = {
+      "username" : "user1",
+      "transaction" : {
+        "amount": amount,
+        "donation" : donate,
+        "vendor": company.name,
+        "tokensEarned": 0,
+        "rewardUsed": null,
+        "cardNumber": 123
       }
+    }
+    axios.post(`http://localhost:4000/payment/pay`, {...req})
+    .then(() => {
+      navigate('/success-payment', {
+        state: {
+          'amount': amount,
+          'donation': donate
+        }
+      })
     })
   }
 
@@ -187,16 +232,14 @@ function confirmPaymentPage() {
       <Container>
         <img src={QrCode} alt="" width={224} height={224}/>
       </Container>
-      <img style={{ alignSelf: 'center' }} src={SushiTei} alt="" width={102} height={105}/>
+      <img style={{ alignSelf: 'center' }} src={company.image} alt="" height={105}/>
       <RowFlex style={{ marginTop: '50px', width: '300px' }}>
         <img src={Money} alt="" width={32} height={32}/>
         <ColumnFlex>
-          <Input type="text" value={amount} onChange={(e) => {
-            const input = e.target.value;
-            const prefix = "$";
-            e.target.value = prefix + input.substr(prefix.length);
-            setAmount(e.target.value);
-          }} placeholder="Amount"/>
+          <RowFlex style={{ alignSelf: 'flex-start' }}>
+            <Text style={{ fontWeight: 'normal', marginRight: '5px' }}> $ </Text>
+            <Input type="text" value={amount} style={{ alignSelf: 'center' }} onChange={(e) => setAmount(e.target.value)} placeholder="Amount"/>
+          </RowFlex>
           <Line />
         </ColumnFlex>
       </RowFlex>
@@ -218,7 +261,14 @@ function confirmPaymentPage() {
             <DonationButton type="button" value={0.3} style={{ backgroundColor: button3 ? '#5DB06C' : '#828282'}} onClick={() => addDonation(0.3)} > $0.30 </DonationButton>
           </RowFlex>
           <Text style={{ color: '#828282', marginTop: '15px' }}> This donation is for the tree donation movement </Text>
-          <img src={PaymentToken} alt="" width={335} height={70} style={{ alignSelf: 'center', marginTop: '30px' }}/>
+          <DonationCard>
+            <div style={{ backgroundColor: '#5DB06C', alignItems: 'center', borderTopLeftRadius: '10px', borderBottomLeftRadius: '10px', padding: '15px 7px' }}>
+              <WhiteLeaf style={{ height: '13px', width: '18px', alignSelf: 'center' }} />
+            </div>
+            <Text style={{ fontWeight: 'normal', marginLeft: '10px' }}>
+              <span style={{ fontWeight: 'bold'}}> {company.name} </span> is ESG certified! You will gain <span style={{ color: '#5DB06C', fontWeight: 'bold'}}> {token} green tokens</span> upon confirmation
+            </Text>
+          </DonationCard>
           <ConfirmButton type="button" onClick={() => confirm()}> {`CONFIRM - SGD${amount}`} </ConfirmButton>
         </>
       )}

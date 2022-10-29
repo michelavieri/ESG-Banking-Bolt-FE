@@ -82,7 +82,12 @@ function paymentPage() {
     }
 
     if(result !== 'Scanning') {
-      navigate('/confirm-payment');
+      navigate('/confirm-payment', {
+        state: {
+          'company': result.text
+        }
+      });
+      window.location.reload(false);
     }
   }
 
