@@ -91,6 +91,12 @@ const GreenTokenButton = styled(Button)`
   justify-content: space-between !important;
 `
 
+const PayButton = styled(Button)`
+  border: 0px;
+  padding: 0px !important;
+  min-width: 74px !important;
+`
+
 function homePage() {
   const navigate = useNavigate();
 
@@ -117,7 +123,9 @@ function homePage() {
 
       <ColumnFlex>
         <Cards style={{ marginBottom: 16 }}>
-          <img src={ScanPay} alt="" width={74} height={74} />
+          <PayButton type="button" onClick={() => navigate('/payment')} onKeyDown={() => navigate('/payment')}>
+            <img src={ScanPay} alt="" width={74} height={74} />
+          </PayButton>
           <img src={Transfer} alt="" width={74} height={74} />
           <img src={Topup} alt="" width={74} height={74} />
           <img src={History} alt="" width={74} height={74} />

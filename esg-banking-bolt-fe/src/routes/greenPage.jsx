@@ -326,7 +326,7 @@ function greenPage() {
       <ColumnFlex>
         <RowFlex style={{ padding: "12px 24px", marginTop:'25px'}}>
           <Title>Promotions</Title>
-          <Subtitle>View All</Subtitle>
+          <Subtitle onClick={() => navigate('/list-promotions')}>View All</Subtitle>
         </RowFlex>
         <Cards>
           <img src={Promo1} alt="" width={250} height={150}/>
