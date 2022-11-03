@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 import { Button } from '@material-ui/core';
 import GreenTree from '../assets/tree-greenpage.png';
 import SkyBg from '../assets/sky-sv.svg';
@@ -11,8 +12,6 @@ import { ReactComponent as Leaf } from '../assets/leaf.svg';
 import { ReactComponent as GreenLeaf } from '../assets/green-leaf.svg';
 import CarbonLogo from '../assets/carbon-footprint.png';
 import { ReactComponent as GreenRightArrow } from '../assets/rightarrow-green.svg';
-import ChickenKFC from '../assets/kfc-chicken.png';
-import KFCLogo from '../assets/kfc-logo.png';
 import Promo1 from '../assets/promo1.png';
 import Promo2 from '../assets/promo2.png';
 import NFT1 from '../assets/nft1.png';
@@ -142,6 +141,26 @@ const Card = styled.div`
 
 function greenPage() {
   const navigate = useNavigate();
+  const [rewards, setRewards] = useState([]);
+
+  useEffect(() => {
+    axios.get(`http://localhost:4000/rewards/retrieveAll`)
+    .then(res => {
+      setRewards(res.data);
+    })
+  }, []);
+
+  const purchase = (reward) => {
+      const req = {
+        "username" : "user1",
+        reward
+      }
+      axios.post(`http://localhost:4000/rewards/exchange`, {...req})
+      .then(() => {
+        navigate('/my-rewards');
+      })
+    }
+
   return (
     <GreenPage>
       <TreeSection>
@@ -167,13 +186,13 @@ function greenPage() {
       </TreeSection>
 
       <GreenTokenButton variant="contained"
-        onClick={() => navigate('/green')} style={{textTransform: 'none'}}>
+        onClick={() => navigate('/my-rewards')} style={{textTransform: 'none'}}>
         <RowFlex style={{ width: '100%' }}>
           <ColumnFlex style={{ margin: 8 }}>
             <p style={{
               marginBlockStart: 0,
               marginBlockEnd: 0,
-              fontSize: '10pt'
+              fontSize: '10px'
             }}>
               Your Green Token Balance
             </p>
@@ -181,15 +200,26 @@ function greenPage() {
               <Leaf />
               <p style={{
                 marginBlockStart: 0,
-                marginBlockEnd: 0
+                marginBlockEnd: 0,
+                fontSize: '12px',
+                fontWeight: '600'
               }}>
-                2,340 points
+                <span style={{ fontSize: '14px', fontWeight: 'bold' }}>2,340</span> points
               </p>
             </div>
+            <p style={{
+              marginBlockStart: 0,
+              marginBlockEnd: 0,
+              fontSize: '10px',
+              textDecoration: 'underline',
+              whiteSpace: 'nowrap'
+            }}>
+              How to get more Green tokens?
+            </p>
           </ColumnFlex>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1px' }}>
             <p style={{fontWeight: 'bold', fontSize: '10pt' }}>
-             My Rewards
+             View My Rewards
             </p>
             <ArrowRight />
           </div>
@@ -263,63 +293,27 @@ function greenPage() {
         </RowFlex>
 
         <Cards>
-          <Card> 
-            <ColumnFlex>
-              <img src={ChickenKFC} alt="" height={72} />
-              <RowFlex style={{marginLeft: 10, marginRight: 10}}>
-                <p style={{fontSize: 10, fontWeight: 'bold'}} >20% Fried Chicken at KFC</p>
-                <img src={KFCLogo} alt="" width={24} height={24} style={{marginTop: 10}} />
-              </RowFlex>
-              <Subtitle style={{marginLeft: 10, marginRight:10, marginTop:-3}}>Valid until: 31 Sept 22</Subtitle>
-              <RowFlex style={{marginLeft: 10, marginRight: 10, marginTop:0, marginBottom: 10}}>
-                <div>
-                  <GreenLeaf/>
-                  <span style={{fontSize: 12, fontWeight: 'bold', marginLeft:5, color: '#5DB06C'}}> 50 </span>
-                </div>
-                <div>
-                  <span style={{fontSize: 12, textDecoration:'underline', color:'#5DB06C'}}>Redeem</span>
-                </div>
-              </RowFlex>
-            </ColumnFlex>
-          </Card>
-          <Card> 
-            <ColumnFlex>
-              <img src={ChickenKFC} alt="" height={72} />
-              <RowFlex style={{marginLeft: 10, marginRight: 10}}>
-                <p style={{fontSize: 10, fontWeight: 'bold'}} >20% Fried Chicken at KFC</p>
-                <img src={KFCLogo} alt="" width={24} height={24} style={{marginTop: 10}} />
-              </RowFlex>
-              <Subtitle style={{marginLeft: 10, marginRight:10, marginTop:-3}}>Valid until: 31 Sept 22</Subtitle>
-              <RowFlex style={{marginLeft: 10, marginRight: 10, marginTop:0, marginBottom: 10}}>
-                <div>
-                  <GreenLeaf/>
-                  <span style={{fontSize: 12, fontWeight: 'bold', marginLeft:5, color: '#5DB06C'}}> 50 </span>
-                </div>
-                <div>
-                  <span style={{fontSize: 12, textDecoration:'underline', color:'#5DB06C'}}>Redeem</span>
-                </div>
-              </RowFlex>
-            </ColumnFlex>
-          </Card>
-          <Card> 
-            <ColumnFlex>
-              <img src={ChickenKFC} alt="" height={72} />
-              <RowFlex style={{marginLeft: 10, marginRight: 10}}>
-                <p style={{fontSize: 10, fontWeight: 'bold'}} >20% Fried Chicken at KFC</p>
-                <img src={KFCLogo} alt="" width={24} height={24} style={{marginTop: 10}} />
-              </RowFlex>
-              <Subtitle style={{marginLeft: 10, marginRight:10, marginTop:-3}}>Valid until: 31 Sept 22</Subtitle>
-              <RowFlex style={{marginLeft: 10, marginRight: 10, marginTop:0, marginBottom: 10}}>
-                <div>
-                  <GreenLeaf/>
-                  <span style={{fontSize: 12, fontWeight: 'bold', marginLeft:5, color: '#5DB06C'}}> 50 </span>
-                </div>
-                <div>
-                  <span style={{fontSize: 12, textDecoration:'underline', color:'#5DB06C'}}>Redeem</span>
-                </div>
-              </RowFlex>
-            </ColumnFlex>
-          </Card>
+          {rewards.map((reward) => (
+            <Card> 
+              <ColumnFlex style={{ width: '160px' }}>
+                <img src={reward.reward.picture} alt="" height={72} style={{ borderRadius: '10px'}} />
+                <RowFlex style={{marginLeft: 10, marginRight: 10}}>
+                  <p style={{fontSize: 10, fontWeight: 'bold'}} >{reward.reward.name}</p>
+                  <img src={reward.reward.logo} alt="" width={24} height={24} style={{marginTop: 10}} />
+                </RowFlex>
+                <Subtitle style={{marginLeft: 10, marginRight:10, marginTop:-3}}>Valid until: 31 Sept 22</Subtitle>
+                <RowFlex style={{marginLeft: 10, marginRight: 10, marginTop:0, marginBottom: 10}}>
+                  <div>
+                    <GreenLeaf/>
+                    <span style={{fontSize: 12, fontWeight: 'bold', marginLeft:5, color: '#5DB06C'}}> {reward.reward.tokensNeeded} </span>
+                  </div>
+                  <button type="button" style={{ backgroundColor: 'transparent', border: '0px' }} onClick={() => purchase(reward)}>
+                    <span style={{fontSize: 12, textDecoration:'underline', color:'#5DB06C'}}>Purchase</span>
+                  </button>
+                </RowFlex>
+              </ColumnFlex>
+            </Card>
+          ))}
         </Cards>
       </ColumnFlex>
 

@@ -10,6 +10,8 @@ import SuccessPaymentPage from './routes/successPaymentPage'
 import TreePage from './routes/treePage';
 import ListRewardsPage from './routes/listRewardsPage'
 import ListPromotionsPage from './routes/listPromotionsPage';
+import MyRewardsPage from './routes/myRewardsPage';
+import UseRewardsPage from './routes/useRewardPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -22,6 +24,8 @@ root.render(
         <Route path="/confirm-payment" element={<ConfirmPaymentPage />} />
         <Route path="/success-payment" element={<SuccessPaymentPage />} />
         <Route path="/tree" element={<TreePage />} />
+        <Route path="/my-rewards" element={<MyRewardsPage/>} />
+        <Route path="/use-reward" element={<UseRewardsPage/>} />
         <Route path="list-rewards" element={<ListRewardsPage/>}/>
         <Route path="list-promotions" element={<ListPromotionsPage/>} />
       </Routes>

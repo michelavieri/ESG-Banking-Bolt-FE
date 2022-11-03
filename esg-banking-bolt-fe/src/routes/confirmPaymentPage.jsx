@@ -232,7 +232,7 @@ function confirmPaymentPage() {
       <Container>
         <img src={QrCode} alt="" width={224} height={224}/>
       </Container>
-      <img style={{ alignSelf: 'center' }} src={company.image} alt="" height={105}/>
+      <img style={{ alignSelf: 'center' }} src={company.picture} alt="" height={105}/>
       <RowFlex style={{ marginTop: '50px', width: '300px' }}>
         <img src={Money} alt="" width={32} height={32}/>
         <ColumnFlex>
