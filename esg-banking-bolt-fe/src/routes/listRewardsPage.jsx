@@ -1,9 +1,8 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 import {ReactComponent as BackButton} from '../assets/back-button.svg';
-import ChickenKFC from '../assets/kfc-chicken.png';
-import KFCLogo from '../assets/kfc-logo.png';
 import { ReactComponent as GreenLeaf } from '../assets/green-leaf.svg';
 
 const RewardsPage = styled.div`
@@ -47,9 +46,10 @@ const Cards = styled.div`
 const Card = styled.div`
   border-radius: 14px;
   background-color: white;
-  margin-left: 10px;
+  margin-left: 5px;
   margin-right: 5px;
   margin-top: 10px;
+  width: 160px;
 `
 const Subtitle = styled.p`
   font-family: Inter;
@@ -62,6 +62,26 @@ const Subtitle = styled.p`
 
 function listRewardsPage() {
     const navigate = useNavigate();
+    const [rewards, setRewards] = useState([]);
+
+    useEffect(() => {
+      axios.get(`http://localhost:4000/rewards/retrieveAll`)
+      .then(res => {
+        setRewards(res.data);
+      })
+    }, []);
+
+    const purchase = (reward) => {
+        const req = {
+          "username" : "user1",
+          reward
+        }
+        axios.post(`http://localhost:4000/rewards/exchange`, {...req})
+        .then(() => {
+          navigate('/my-rewards');
+        })
+      }
+
     return (
         <RewardsPage>
             <Header>
@@ -72,85 +92,30 @@ function listRewardsPage() {
             </Header>
             <Cards>
                 <ColumnFlex>
-                    <RowFlex>
+                    <RowFlex style={{flexWrap:'wrap'}}>
+                    {rewards.map((reward) => (
                         <Card> 
                             <ColumnFlex>
-                                <img src={ChickenKFC} alt="" height={72} />
+                                <img src={reward.reward.picture} alt="" height={72} style={{ borderRadius: '10px'}} />
                                 <RowFlex style={{marginLeft: 10, marginRight: 10}}>
-                                    <p style={{fontSize: 10, fontWeight: 'bold'}} >20% Fried Chicken at KFC</p>
-                                    <img src={KFCLogo} alt="" width={24} height={24} style={{marginTop: 10}} />
+                                    <p style={{fontSize: 10, fontWeight: 'bold'}} >{reward.reward.name}</p>
+                                    <img src={reward.reward.logo} alt="" width={24} height={24} style={{marginTop: 10}} />
                                 </RowFlex>
-                                <Subtitle style={{marginLeft: 10, marginRight:10, marginTop:-3}}>Valid until: 31 Sept 22</Subtitle>
+                                <Subtitle style={{marginLeft: 10, marginRight:10, marginTop:-3}}>Valid until: 31 Dec 22</Subtitle>
                                 <RowFlex style={{marginLeft: 10, marginRight: 10, marginTop:0, marginBottom: 10}}>
                                     <div>
                                     <GreenLeaf/>
-                                    <span style={{fontSize: 12, fontWeight: 'bold', marginLeft:5, color: '#5DB06C'}}> 50 </span>
+                                    <span style={{fontSize: 12, fontWeight: 'bold', marginLeft:5, color: '#5DB06C'}}> {reward.reward.tokenNeeded} </span>
                                     </div>
                                     <div>
-                                    <span style={{fontSize: 12, textDecoration:'underline', color:'#5DB06C'}}>Redeem</span>
+                                    <button type="button" style={{ backgroundColor: 'transparent', border: '0px' }} onClick={() => purchase(reward)}>
+                                        <span style={{fontSize: 12, textDecoration:'underline', color:'#5DB06C'}}>Purchase</span>
+                                    </button>
                                     </div>
                                 </RowFlex>
                             </ColumnFlex>
                         </Card>
-                        <Card> 
-                            <ColumnFlex>
-                                <img src={ChickenKFC} alt="" height={72} />
-                                <RowFlex style={{marginLeft: 10, marginRight: 10}}>
-                                    <p style={{fontSize: 10, fontWeight: 'bold'}} >20% Fried Chicken at KFC</p>
-                                    <img src={KFCLogo} alt="" width={24} height={24} style={{marginTop: 10}} />
-                                </RowFlex>
-                                <Subtitle style={{marginLeft: 10, marginRight:10, marginTop:-3}}>Valid until: 31 Sept 22</Subtitle>
-                                <RowFlex style={{marginLeft: 10, marginRight: 10, marginTop:0, marginBottom: 10}}>
-                                    <div>
-                                    <GreenLeaf/>
-                                    <span style={{fontSize: 12, fontWeight: 'bold', marginLeft:5, color: '#5DB06C'}}> 50 </span>
-                                    </div>
-                                    <div>
-                                    <span style={{fontSize: 12, textDecoration:'underline', color:'#5DB06C'}}>Redeem</span>
-                                    </div>
-                                </RowFlex>
-                            </ColumnFlex>
-                        </Card>
-                    </RowFlex>
-                    <RowFlex>
-                        <Card> 
-                            <ColumnFlex>
-                                <img src={ChickenKFC} alt="" height={72} />
-                                <RowFlex style={{marginLeft: 10, marginRight: 10}}>
-                                    <p style={{fontSize: 10, fontWeight: 'bold'}} >20% Fried Chicken at KFC</p>
-                                    <img src={KFCLogo} alt="" width={24} height={24} style={{marginTop: 10}} />
-                                </RowFlex>
-                                <Subtitle style={{marginLeft: 10, marginRight:10, marginTop:-3}}>Valid until: 31 Sept 22</Subtitle>
-                                <RowFlex style={{marginLeft: 10, marginRight: 10, marginTop:0, marginBottom: 10}}>
-                                    <div>
-                                    <GreenLeaf/>
-                                    <span style={{fontSize: 12, fontWeight: 'bold', marginLeft:5, color: '#5DB06C'}}> 50 </span>
-                                    </div>
-                                    <div>
-                                    <span style={{fontSize: 12, textDecoration:'underline', color:'#5DB06C'}}>Redeem</span>
-                                    </div>
-                                </RowFlex>
-                            </ColumnFlex>
-                        </Card>
-                        <Card> 
-                            <ColumnFlex>
-                                <img src={ChickenKFC} alt="" height={72} />
-                                <RowFlex style={{marginLeft: 10, marginRight: 10}}>
-                                    <p style={{fontSize: 10, fontWeight: 'bold'}} >20% Fried Chicken at KFC</p>
-                                    <img src={KFCLogo} alt="" width={24} height={24} style={{marginTop: 10}} />
-                                </RowFlex>
-                                <Subtitle style={{marginLeft: 10, marginRight:10, marginTop:-3}}>Valid until: 31 Sept 22</Subtitle>
-                                <RowFlex style={{marginLeft: 10, marginRight: 10, marginTop:0, marginBottom: 10}}>
-                                    <div>
-                                    <GreenLeaf/>
-                                    <span style={{fontSize: 12, fontWeight: 'bold', marginLeft:5, color: '#5DB06C'}}> 50 </span>
-                                    </div>
-                                    <div>
-                                    <span style={{fontSize: 12, textDecoration:'underline', color:'#5DB06C'}}>Redeem</span>
-                                    </div>
-                                </RowFlex>
-                            </ColumnFlex>
-                        </Card>
+                    ))}
                     </RowFlex>
                 </ColumnFlex>
             </Cards>
